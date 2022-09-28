@@ -32,10 +32,21 @@ export async function initializePlaces() {
  * Loads the place list data and merges with place image data.
  * @return {!Promise<!Array<!Place>>}
  */
+
+async function getPlaces(){
+  try{
+  const imgData  = await fetch("https://byteboard.dev/api/data/places");
+  }
+  catch(err){
+    console.log(err)
+  }
+}
+getPlaces()
+
 async function loadPlacesWithImages() {
   
   
-/*  In order to display the list of places in our web app, we first need to get
+/*  I1.  In order to display the list of places in our web app, we first need to get
     the place and image data from two different REST API endpoints. In
     data/placeData.js, implement
 
@@ -47,8 +58,8 @@ async function loadPlacesWithImages() {
     https://byteboard.dev/api/data/img/{placeId}
   
   */
-  const imgData  = fetch('https://byteboard.dev/api/data/places');
-  console.log(imgData)
+  
+  
   
   // TODO: Load the place list data from https://byteboard.dev/api/data/places
   // and combine with images from https://byteboard.dev/api/data/img/{placeId}
