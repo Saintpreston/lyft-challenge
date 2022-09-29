@@ -27,21 +27,25 @@ export async function initializePlaces() {
   data.set('places', placesWithImages);
   data.set('placesLoaded', true);
 }
-
-/**
- * Loads the place list data and merges with place image data.
- * @return {!Promise<!Array<!Place>>}
- */
-
 async function getPlaces(){
   try{
-  const imgData  = await fetch("https://byteboard.dev/api/data/places");
+  const imgData  = await fetch("https://byteboard.dev/api/data/places", {
+  method: 'GET',
+   'Content-Type': 'application/json'
+});
   }
   catch(err){
     console.log(err)
   }
 }
 getPlaces()
+
+/**
+ * Loads the place list data and merges with place image data.
+ * @return {!Promise<!Array<!Place>>}
+ */
+
+
 
 async function loadPlacesWithImages() {
   
