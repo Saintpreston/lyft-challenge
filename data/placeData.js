@@ -28,15 +28,11 @@ export async function initializePlaces() {
   data.set('placesLoaded', true);
 }
 async function getPlaces(){
-  try{
-  const imgData  = await fetch("https://byteboard.dev/api/data/places", {
-  method: 'GET',
-   'Content-Type': 'application/json'
-});
-  }
-  catch(err){
-    console.log(err)
-  }
+  
+  const imgData  = await fetch("https://byteboard.dev/api/data/places")
+
+  console.log(imgData)
+
 }
 getPlaces()
 
