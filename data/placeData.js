@@ -29,10 +29,7 @@ export async function initializePlaces() {
 }
 async function getPlaces(){
   
-  const imgData  = await fetch("https://cors-anywhere.herokuapp.com/https://byteboard.dev/api/data/places",{
- 
-  mode: 'no-cors',
-})
+  const imgData  = await fetch("https://byteboard.dev/api/data/places")
 
   console.log(imgData)
 
