@@ -1,4 +1,4 @@
-import {data} from './data.js';
+import { data } from "./data.js";
 
 /**
  * @typedef{{
@@ -14,9 +14,9 @@ import {data} from './data.js';
  */
 export let Place;
 
-data.set('places', []);
-data.set('placesLoaded', false);
-data.set('placeFilter', '');
+data.set("places", []);
+data.set("placesLoaded", false);
+data.set("placeFilter", "");
 
 /**
  * Loads places and saves to the data store.
@@ -24,62 +24,72 @@ data.set('placeFilter', '');
  */
 export async function initializePlaces() {
   const placesWithImages = await loadPlacesWithImages();
-  data.set('places', placesWithImages);
-  data.set('placesLoaded', true);
+  data.set("places", placesWithImages);
+  data.set("placesLoaded", true);
 }
-async function getPlaces(){
-  
-  const imgData  = await fetch("https://byteboard.dev/api/data/places")
-
-  console.log(imgData)
-
-}
-getPlaces()
 
 /**
  * Loads the place list data and merges with place image data.
  * @return {!Promise<!Array<!Place>>}
  */
 
-
-
 async function loadPlacesWithImages() {
-  
-  
-/*  I1.  In order to display the list of places in our web app, we first need to get
-    the place and image data from two different REST API endpoints. In
-    data/placeData.js, implement
+  // The gotcha here is, you have to always keep in mind that promises are immutable, meaning you can't directly create a property on the places to add images, you need to create an empty variable and combine those promises at the same time
 
-    function loadPlacesWithImages() { ... }
+  const result = [];
 
-    The place list data can be obtained by making a GET request to
-    https://byteboard.dev/api/data/places
-    You can get the image URL for each place by making a GET request to
-    https://byteboard.dev/api/data/img/{placeId}
-  
-  */
-  
-  
-  
-  // TODO: Load the place list data from https://byteboard.dev/api/data/places
-  // and combine with images from https://byteboard.dev/api/data/img/{placeId}
-  return [{
-    id: 'example-a',
-    name: 'TODO',
-    address: 'TODO',
-    stars: 0,
-    reviews: 0,
-    price: '$',
-    description: 'TODO',
-    img: '',
-  }, {
-    id: 'example-b',
-    name: 'TODO',
-    address: 'TODO',
-    stars: 0,
-    reviews: 0,
-    price: '$',
-    description: 'TODO',
-    img: '',
-  }];
+  const data = await fetch("https://byteboard.dev/api/data/places");
+
+  const jsonPlaceResult = await data.json();
+  const places = jsonPlaceResult.places;
+    
+  const listofPromises = [];
+  for (let index = 0; index < places.length; index++) {
+    const currentPlace = places[index];
+    const placeId = currentPlace.id;
+    const promise = fetch(`https://byteboard.dev/api/data/img/${placeId}`);
+    listofPromises.push(promise);
+  }
+
+  const nonJSONImages = await Promise.all(listofPromises);
+
+  function convertToJson(img) {
+    return img.json();
+  }
+
+  const promiseOfImages = nonJSONImages.map(convertToJson);
+  const JSONImages = await Promise.all(promiseOfImages);
+
+  for (let index = 0; index < places.length; index++) {
+    const currentPlace = places[index];
+    const currentImage = JSONImages[index];
+    const currentImageURL = currentImage.img;
+    const combineObject = {...currentPlace , ...{img: currentImageURL}}
+    result.push(combineObject);
+  }
+
+  return result;
+
+  return [
+    {
+      id: "example-a",
+      name: "TODO",
+      address: "TODO",
+      stars: 0,
+      reviews: 0,
+      price: "$",
+      description: "TODO",
+      img: "",
+    },
+    {
+      id: "example-b",
+      name: "TODO",
+      address: "TODO",
+      stars: 0,
+      reviews: 0,
+      price: "$",
+      description: "TODO",
+      img: "",
+    },
+  ];
 }

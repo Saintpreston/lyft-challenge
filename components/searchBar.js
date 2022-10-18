@@ -10,7 +10,10 @@ function handleKeyUp(event) {
   const {target} = event;
   if (!target.dataset.hasOwnProperty('searchBar')) return;
   data.set('placeFilter', event.target.value);
+ // getFilteredPlaces()
 }
+
+
 
 /**
  * Renders a search bar element.

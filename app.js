@@ -14,7 +14,7 @@ window.addEventListener('popstate', refreshApp);
 
 // Load the place list data.
 initializePlaces();
-console.log('refresh');
+
 /** Renders a fresh copy of the app and inserts it into the DOM. */
 function refreshApp() {
   
